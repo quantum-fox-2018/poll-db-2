@@ -1,0 +1,18 @@
+SELECT TopThree.TotalVote,
+	TopThree.name AS PoliticianName,
+	Voters.firstName||' '||Voters.lastName AS VoterName,
+	Voters.gender
+FROM (SELECT Politicians.politicianId,
+		Politicians.name,
+		COUNT (*) AS TotalVote
+	FROM Politicians
+	JOIN Votes
+		ON Politicians.politicianId = Votes.politicianId
+	GROUP BY Politicians.name
+	ORDER BY TotalVote DESC
+	LIMIT 3) AS TopThree
+JOIN Votes
+	ON Votes.politicianId = TopThree.politicianId
+JOIN Voters
+	ON Voters.votersId = Votes.voterId
+ORDER BY TopThree.TotalVote DESC
