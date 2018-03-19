@@ -28,7 +28,19 @@ function number1(){
 }
 
 function number2(){
-    db.all(`SELECT `)
+    db.all(`SELECT (SELECT COUNT(*) FROM Votes WHERE politicians.id = Votes.politicianId) AS totalVotes, Politicians.name AS politicianName, (Voters.first_name||" "||Voters.last_name) AS voterName, Voters.gender
+            FROM Votes
+                JOIN Politicians ON votes.politicianId = politicians.id
+                JOIN Voters ON votes.voterid = voters.id
+            WHERE Politicians.id IN (SELECT Politicians.id FROM Politicians JOIN Votes on Politicians.id = Votes.politicianId GROUP BY Politicians.id ORDER BY COUNT(votes.voterId) desc LIMIT 3)
+            GROUP BY Votes.id
+            ORDER BY totalVotes Desc`, function(err, result){
+                if(err){
+                    console.log(err);
+                }else{
+                    console.log(result);
+                }
+            })
 }
 
 function number3(){
@@ -49,7 +61,7 @@ function number3(){
 
 //DRIVER CODE
 //====================
-number3();
+number2();
 
 
 db.close();
