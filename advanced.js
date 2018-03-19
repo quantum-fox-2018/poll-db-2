@@ -81,3 +81,5 @@ db.serialize(()=>{
   }))
 
 })
+
+db.close();
