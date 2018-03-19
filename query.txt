@@ -1,7 +1,8 @@
 RELEASE 0 NOMOR 1 : BERAPA BANYAK VOTE YANG DITERIMA POLITICIANS YANG MEMILIKI GRADE DIBAWAH 9
 
-SELECT * FROM Politicians
-WHERE grade_current < 9 ORDER BY grade_current ASC;
+SELECT Politicians.name, Politicians.location, Politicians.grade_current,
+(SELECT COUNT(politiciansId) FROM Votes WHERE politiciansId = Politicians.id) as totalVote
+FROM Politicians WHERE grade_current < 9 ORDER BY grade_current ASC;
 
 RELEASE 0 NOMOR 2 : 3 Politisi dengan vote terbanyak dan siapa saja yang memilihnya
 
