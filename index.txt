@@ -1,0 +1,8 @@
+// 1. Berapa banyak vote yang diterima politicians yang memiliki grade di bawah 9 (gunakan field grade_current) > tampilkan nama politician, lokasi, grade_current dan jumlah votenya. urutkan berdasarkan grade yang paling kecil.
+SELECT Politicians.name, Politicians.party, Politicians.location, count(*) AS "totalVote" FROM Politicians JOIN Votes ON Politicians.id = Votes.politiciansId GROUP BY Politicians.name ORDER BY totalVote DESC LIMIT 3;
+
+// 2. Tampilkan 3 Politicians yang memiliki vote terbanyak dan siapa saja yang memilih Politician tersebut. List nama politician, total vote, full_name voter-nya dan jenis kelamin pemilih-nya.
+SELECT (SELECT count(*) FROM Votes WHERE politiciansId = Politicians.id GROUP BY Votes.politiciansId) AS "totalVote", Politicians.name, Voters.first_name || ' ' || Voters.last_name, Voters.gender FROM Votes JOIN Politicians ON Votes.politiciansId = Politicians.id JOIN Voters ON Votes.votersId = Voters.id WHERE Politicians.id IN (SELECT Politicians.id FROM Politicians JOIN Votes ON Politicians.id = Votes.politiciansId GROUP BY Politicians.id ORDER BY count(Votes.votersId) desc LIMIT 3) ORDER BY totalVote desc, Politicians.id;
+
+// 3. List nama orang-orang yang melakukan kecurangan, yaitu yang melakukan vote lebih dari satu kali. Tampilkan jumlah voting yang dia lakukan, nama lengkap, jenis kelamin dan umur-nya. Urutkan berdasarkan jumlah voting fraud yang banyak dan berdasarkan nama lengkap dari pemilih.
+SELECT (SELECT COUNT(*) FROM Votes WHERE votersId = Voters.id) as "totalVote", first_name || ' ' || last_name AS name, gender, age FROM Voters WHERE totalVote > 1 ORDER BY totalVote desc;
