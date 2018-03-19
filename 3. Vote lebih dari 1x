@@ -1,0 +1,10 @@
+SELECT COUNT(*) AS TotalVote,
+	Voters.firstName||' '||Voters.lastName AS Name,
+	Voters.gender,
+	Voters.age
+FROM Voters
+JOIN Votes
+	ON Voters.votersId = Votes.voterId
+GROUP BY Name
+HAVING TotalVote > 1
+ORDER BY TotalVote DESC

@@ -1,0 +1,10 @@
+SELECT Politicians.name,
+	Politicians.location,
+	Politicians.gradeCurrent,
+	COUNT(*) AS TotalVote
+FROM Politicians
+JOIN Votes 
+	ON Politicians.politicianId = Votes.politicianId
+GROUP BY Politicians.name
+HAVING Politicians.gradeCurrent < 9
+ORDER BY TotalVote ASC
