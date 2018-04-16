@@ -1,0 +1,21 @@
+RELEASE 0 NOMOR 1 : BERAPA BANYAK VOTE YANG DITERIMA POLITICIANS YANG MEMILIKI GRADE DIBAWAH 9
+
+SELECT Politicians.name, Politicians.location, Politicians.grade_current,
+(SELECT COUNT(politiciansId) FROM Votes WHERE politiciansId = Politicians.id) as totalVote
+FROM Politicians WHERE grade_current < 9 ORDER BY grade_current ASC;
+
+RELEASE 0 NOMOR 2 : 3 Politisi dengan vote terbanyak dan siapa saja yang memilihnya
+
+SELECT tabelBayangan.totalVote, tabelBayangan.name AS politicianName, Voters.first_name||' '||Voters.last_name AS voterName, Voters.gender FROM
+(SELECT (SELECT COUNT(politiciansId) FROM Votes
+WHERE politiciansId = Politicians.id) AS totalVote,name, (SELECT politiciansId FROM Votes WHERE politiciansId = Politicians.id) as Politicians_ID FROM Politicians
+ORDER BY totalVote DESC LIMIT 3) AS tabelBayangan
+JOIN Votes ON Politicians_ID = politiciansId
+JOIN Voters ON votersId = Voters.id
+ORDER BY tabelBayangan.totalVote DESC;
+
+RELEASE 0 NOMOR 3 :
+
+SELECT (SELECT COUNT(votersId) FROM Votes WHERE Voters.id = votersId) AS totalVote, first_name||' '||last_name AS name,gender,age FROM Voters
+WHERE totalVote > 1
+ORDER BY totalVote DESC;
